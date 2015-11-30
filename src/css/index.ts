@@ -61,17 +61,17 @@ function createCSSReceiver(): IReceiver {
 
 
 /**
- * Remove CSS from the DOM by `href` path.
+ * Remove CSS from the DOM by `href`.
  */
-function removeCSS(path: string): void {
+function removeCSS(href: string): void {
   var nodes = document.getElementsByTagName('link');
   for (var i = 0; i < nodes.length; i++) {
-    if (nodes[i].href === path) {
+    if (nodes[i].href === href) {
       nodes[i].parentNode.removeChild(nodes[i]);
     }
   }
 }
 
 
-// css registry
+// Mapping of extension ids to link `href`.
 var cssRegistry = new Map<string, string>();
