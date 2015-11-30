@@ -65,8 +65,8 @@ function createCSSReceiver(): IReceiver {
  * Remove CSS from the DOM by `href`.
  */
 function removeCSS(href: string): void {
-  var nodes = document.getElementsByTagName('link');
-  for (var i = 0; i < nodes.length; i++) {
+  let nodes = document.getElementsByTagName('link');
+  for (let i = 0; i < nodes.length; i++) {
     if (nodes[i].href === href) {
       nodes[i].parentNode.removeChild(nodes[i]);
     }
