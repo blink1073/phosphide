@@ -22,7 +22,7 @@ import {
 export
 function createCSSReceiver(): IReceiver {
   return {
-    add: function(extension: IExtension) {
+    add: (extension: IExtension) => {
       let paths: string[] = [];
       if (extension.config &&
           extension.config.path &&
@@ -35,7 +35,7 @@ function createCSSReceiver(): IReceiver {
         paths.push(extension.config.paths);
       }
       paths.forEach(path => {
-        System.normalize(path).then(function(newPath) {
+        System.normalize(path).then(newPath => {
           newPath = newPath.replace('!$css', '');
           var link = document.createElement('link');
           link.rel = 'stylesheet';
@@ -45,14 +45,14 @@ function createCSSReceiver(): IReceiver {
         });
       });
     },
-    remove: function(id: string) {
+    remove: (id: string) => {
       let path = cssRegistry.get(id);
       if (path) {
         removeCSS(path);
         cssRegistry.delete(id);
       }
     },
-    dispose: function() {
+    dispose: () => {
       cssRegistry.forEach(removeCSS);
       cssRegistry = new Map<string, string>();
     }
