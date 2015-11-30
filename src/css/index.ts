@@ -46,8 +46,13 @@ function createCSSReceiver(): IReceiver {
         path = extension.data.path;
       }
       if (path) {
-        System.import(path).then(() => {
-          cssRegistry.set(extension.id, path);
+        System.normalize(path).then(function(newPath) {
+          newPath = newPath.replace('!$css', '');
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = newPath;
+          document.head.appendChild(link);
+          cssRegistry.set(extension.id, link.href);
         });
       }
     },
@@ -70,14 +75,12 @@ function createCSSReceiver(): IReceiver {
  * Remove CSS from the DOM by `href` path.
  */
 function removeCSS(path: string): void {
-  System.normalize(path).then((newPath) => {
-    let nodes = document.getElementsByTagName('link');
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].href === newPath) {
-        nodes[i].parentNode.removeChild(nodes[i]);
-      }
+  var nodes = document.getElementsByTagName('link');
+  for (var i = 0; i < nodes.length; i++) {
+    if (nodes[i].href === path) {
+      nodes[i].parentNode.removeChild(nodes[i]);
     }
-  });
+  }
 }
 
 
