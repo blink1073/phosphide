@@ -36,6 +36,7 @@ function createCSSReceiver(): IReceiver {
       }
       paths.forEach(path => {
         System.normalize(path).then(newPath => {
+          // handle steal.js path normalization artifact
           newPath = newPath.replace('!$css', '');
           var link = document.createElement('link');
           link.rel = 'stylesheet';
