@@ -10,6 +10,8 @@
   },
   "files": [
     "../typings/es6-promise.d.ts",
+    "../typings/es6-collections.d.ts",
+    "../typings/systemjs.d.ts",
     "index.ts"
   ]
 }

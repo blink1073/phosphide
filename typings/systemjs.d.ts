@@ -15,6 +15,8 @@ interface System {
 
     delete(module: string): boolean;
 
+    normalize(module: string): Promise<string>;
+
     npm: { [key: string]: npmObject };
 
 }
