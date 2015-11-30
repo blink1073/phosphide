@@ -13,39 +13,28 @@ import {
 
 
 /**
- * The interface for `phosphide:css` extension point.
- */
-export
-interface IPhosphideCSS {
-  /**
-   * Fully qualified path to the css file (e.g. `foo/lib/index.css`).
-   */
-  path: string;
-}
-
-
-/**
  * The factory function for the `phosphide:css:main` extension point.
+ *
+ * The extension point accepts only `config` inputs, which can
+ * contain `path: string` or `paths: string[]` fields.
+ * The path(s) must be fully qualified (e.g. `foo/lib/index.css`).
  */
 export
 function createCSSReceiver(): IReceiver {
   return {
     add: function(extension: IExtension) {
-      let path = '';
-      if (extension.item &&
-          extension.item.path &&
-          extension.item.hasOwnProperty('path')) {
-        path = extension.item.path;
-      } else if (extension.config &&
-                 extension.config.path &&
-                 extension.config.hasOwnProperty('path')) {
-        path = extension.config.path;
-      } else if (extension.data &&
-                 extension.data.path &&
-                 extension.data.hasOwnProperty('path')) {
-        path = extension.data.path;
+      let paths: string[] = [];
+      if (extension.config &&
+          extension.config.path &&
+          extension.config.hasOwnProperty('path')) {
+        paths.push(extension.config.path);
       }
-      if (path) {
+      if (extension.config &&
+          extension.config.paths &&
+          extension.config.hasOwnProperty('paths')) {
+        paths.push(extension.config.paths);
+      }
+      paths.forEach(path => {
         System.normalize(path).then(function(newPath) {
           newPath = newPath.replace('!$css', '');
           var link = document.createElement('link');
@@ -54,7 +43,7 @@ function createCSSReceiver(): IReceiver {
           document.head.appendChild(link);
           cssRegistry.set(extension.id, link.href);
         });
-      }
+      });
     },
     remove: function(id: string) {
       let path = cssRegistry.get(id);
