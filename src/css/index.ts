@@ -17,13 +17,13 @@ import {
  *
  * The extension point accepts only `config` inputs, which can
  * contain `path: string` or `paths: string[]` fields.
- * The path(s) must be fully qualified (e.g. `foo/lib/index.css`).
+ * The path is the relative path from the plugin root.
  */
 export
 function createCSSReceiver(): IReceiver {
   return {
     isDisposed: false,
-    add: (extension: IExtension) => {
+    add: function(extension: IExtension) {
       let paths: string[] = [];
       if (extension.config &&
           extension.config.path &&
@@ -36,25 +36,26 @@ function createCSSReceiver(): IReceiver {
         paths.push(extension.config.paths);
       }
       paths.forEach(path => {
-        System.normalize(path).then(newPath => {
+        let fullPath = `${extension.plugin}/${path}`;
+        System.normalize(fullPath).then(normPath => {
           // handle steal.js path normalization artifact
-          newPath = newPath.replace('!$css', '');
+          normPath = normPath.replace('!$css', '');
           let link = document.createElement('link');
           link.rel = 'stylesheet';
-          link.href = newPath;
+          link.href = normPath;
           document.head.appendChild(link);
           cssRegistry.set(extension.id, link.href);
         });
       });
     },
-    remove: (id: string) => {
+    remove: function(id: string) {
       let path = cssRegistry.get(id);
       if (path) {
         removeCSS(path);
         cssRegistry.delete(id);
       }
     },
-    dispose: () => {
+    dispose: function() {
       cssRegistry.forEach(removeCSS);
       cssRegistry = new Map<string, string>();
       this.isDisposed = true;
