@@ -51,6 +51,7 @@ interface ICommandExtension {
 export
 function createCommandReceiver(): IReceiver {
   return {
+    isDisposed: false,
     add: function(extension: IExtension) {
       let id = extension.item.id;
       if (id in commandMap) {

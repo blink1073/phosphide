@@ -46,6 +46,7 @@ interface IUIExtension {
 export
 function createUIReceiver(): IReceiver {
   return {
+    isDisposed: false,
     add: function(extension: IExtension) {
       if (extension.item && extension.item.hasOwnProperty('items')) {
         let items = extension.item.items;

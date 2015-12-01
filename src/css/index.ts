@@ -22,6 +22,7 @@ import {
 export
 function createCSSReceiver(): IReceiver {
   return {
+    isDisposed: false,
     add: (extension: IExtension) => {
       let paths: string[] = [];
       if (extension.config &&
@@ -56,6 +57,7 @@ function createCSSReceiver(): IReceiver {
     dispose: () => {
       cssRegistry.forEach(removeCSS);
       cssRegistry = new Map<string, string>();
+      this.isDisposed = true;
     }
   }
 }
