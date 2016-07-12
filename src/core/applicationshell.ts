@@ -46,6 +46,26 @@ import {
  */
 const APPLICATION_SHELL_CLASS = 'p-ApplicationShell';
 
+/**
+ * The class name added to AppShell left area widgets.
+ */
+const LEFT_AREA_CLASS = 'p-ApplicationShell-leftArea';
+
+/**
+ * The class name added to AppShell left area widgets.
+ */
+const RIGHT_AREA_CLASS = 'p-ApplicationShell-rightArea';
+
+/**
+ * The class name added to AppShell main area widgets.
+ */
+const MAIN_AREA_CLASS = 'p-ApplicationShell-mainArea';
+
+/**
+ * The class name added to AppShell top area widgets.
+ */
+const TOP_AREA_CLASS = 'p-ApplicationShell-topArea';
+
 
 /**
  * The options for adding a widget to a side area of the shell.
@@ -146,6 +166,7 @@ class ApplicationShell extends Widget {
       console.error('widgets added to app shell must have unique id property');
       return;
     }
+    widget.addChild(TOP_AREA_CLASS);
     // Temporary: widgets are added to the panel in order of insertion.
     this._topPanel.addChild(widget);
   }
@@ -159,6 +180,7 @@ class ApplicationShell extends Widget {
       return;
     }
     let rank = 'rank' in options ? options.rank : 100;
+    widget.addClass(LEFT_AREA_CLASS);
     this._leftHandler.addWidget(widget, rank);
   }
 
@@ -171,6 +193,7 @@ class ApplicationShell extends Widget {
       return;
     }
     let rank = 'rank' in options ? options.rank : 100;
+    widget.addClass(RIGHT_AREA_CLASS);
     this._rightHandler.addWidget(widget, rank);
   }
 
@@ -183,6 +206,7 @@ class ApplicationShell extends Widget {
       console.error('widgets added to app shell must have unique id property');
       return;
     }
+    widget.addClass(MAIN_AREA_CLASS);
     this._dockPanel.insertTabAfter(widget);
   }
 
